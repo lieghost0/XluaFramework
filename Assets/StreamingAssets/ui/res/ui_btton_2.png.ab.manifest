@@ -1,9 +1,9 @@
 ManifestFileVersion: 0
-CRC: 3109248653
+CRC: 1693227937
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 07326df40d50e47801b9554c67eff827
+    Hash: 7b2a410a185cac7b3ec85982d3cd8bca
   TypeTreeHash:
     serializedVersion: 2
     Hash: f267fd2d8bcb1179236b6179ac5313bc
@@ -15,5 +15,5 @@ ClassTypes:
   Script: {instanceID: 0}
 SerializeReferenceClassIdentifiers: []
 Assets:
-- Assets/BuildResources/UI/Res/logo.png
+- Assets/BuildResources/UI/Res/ui_btton_2.png
 Dependencies: []
