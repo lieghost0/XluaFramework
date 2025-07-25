@@ -1,0 +1,22 @@
+ManifestFileVersion: 0
+CRC: 515595851
+AssetBundleManifest:
+  AssetBundleInfos:
+    Info_0:
+      Name: ./ui/res/bg01.png.ab
+      Dependencies: {}
+    Info_1:
+      Name: ./ui/res/game_tips.png.ab
+      Dependencies: {}
+    Info_2:
+      Name: ./ui/res/loading.jpg.ab
+      Dependencies: {}
+    Info_3:
+      Name: ./ui/res/loading_bg.png.ab
+      Dependencies: {}
+    Info_4:
+      Name: ./ui/res/logo.png.ab
+      Dependencies: {}
+    Info_5:
+      Name: ./ui/res/logom.png.ab
+      Dependencies: {}
