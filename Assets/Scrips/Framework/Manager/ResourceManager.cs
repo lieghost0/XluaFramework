@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
@@ -40,6 +40,9 @@ public class ResourceManager : MonoBehaviour
                 bundleInfo.Dependences.Add(info[j]);
             }
             m_BundleInfos.Add(bundleInfo.AssetsName, bundleInfo);
+
+            if (info[0].IndexOf("LuaScripts") > 0)
+                Manager.Lua.LuaNames.Add(info[0]);
         }
     }
 
@@ -72,6 +75,7 @@ public class ResourceManager : MonoBehaviour
         action?.Invoke(bundleRequest?.asset);
     }
 
+#if UNITY_EDITOR
     /// <summary>
     /// 编辑器环境加载资源
     /// </summary>
@@ -85,12 +89,15 @@ public class ResourceManager : MonoBehaviour
             Debug.LogError("assets name is not exist:" + assetName);
         action?.Invoke(obj);
     }
+#endif
 
     private void LoadAsset(string assetName, Action<UObject> action)
     {
-        if(AppConst.GameMode == GameMode.EditorMode)
+#if UNITY_EDITOR
+        if (AppConst.GameMode == GameMode.EditorMode)
             EditorLoadAsset(assetName, action);
         else
+#endif
             StartCoroutine(LoadBundleAsync(assetName, action));
     }
 
@@ -117,6 +124,11 @@ public class ResourceManager : MonoBehaviour
     public void LoadScene(string assetName, Action<UObject> action = null)
     {
         LoadAsset(PathUtil.GetScenePath(assetName), action);
+    }
+
+    internal void LoadLua(string assetName, Action<UObject> action = null)
+    {
+        LoadAsset(assetName, action);
     }
 
     //Tag:卸载暂时不做

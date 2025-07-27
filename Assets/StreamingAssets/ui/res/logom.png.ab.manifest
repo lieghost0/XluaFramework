@@ -1,0 +1,17 @@
+ManifestFileVersion: 0
+CRC: 2663037224
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 0966d207998b554930490d46682234f6
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: ff414f606ea1972259b080d7bcf51689
+HashAppended: 0
+ClassTypes:
+- Class: 28
+  Script: {instanceID: 0}
+SerializeReferenceClassIdentifiers: []
+Assets:
+- Assets/BuildResources/UI/Res/logoM.png
+Dependencies: []
