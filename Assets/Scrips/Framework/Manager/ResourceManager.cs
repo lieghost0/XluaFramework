@@ -20,7 +20,7 @@ public class ResourceManager : MonoBehaviour
     /// <summary>
     /// 解析版本文件
     /// </summary>
-    private void ParseVersionFile()
+    public void ParseVersionFile()
     {
         ///版本文件的路径
         string url = Path.Combine(PathUtil.BundleResourcePath, AppConst.FileListName);
@@ -68,25 +68,57 @@ public class ResourceManager : MonoBehaviour
         AssetBundleRequest bundleRequest = request.assetBundle.LoadAssetAsync(assetName);
         yield return bundleRequest;
 
+        Debug.Log("this is LoadBundleAsync");
         action?.Invoke(bundleRequest?.asset);
     }
 
-    public void LoadAsset(string assetName, Action<UObject> action)
+    /// <summary>
+    /// 编辑器环境加载资源
+    /// </summary>
+    /// <param name="assetName"></param>
+    /// <param name="action"></param>
+    void EditorLoadAsset(string assetName, Action<UObject> action = null)
     {
-        StartCoroutine(LoadBundleAsync(assetName, action));
+        Debug.Log("this is EditorLoadAsset");
+        UObject obj = UnityEditor.AssetDatabase.LoadAssetAtPath(assetName, typeof(UObject));
+        if (obj == null)
+            Debug.LogError("assets name is not exist:" + assetName);
+        action?.Invoke(obj);
     }
 
-    void Start()
+    private void LoadAsset(string assetName, Action<UObject> action)
     {
-        ParseVersionFile();
-        LoadAsset("Assets/BuildResources/UI/Prefabs/TestUI.prefab", OnComplete);
+        if(AppConst.GameMode == GameMode.EditorMode)
+            EditorLoadAsset(assetName, action);
+        else
+            StartCoroutine(LoadBundleAsync(assetName, action));
     }
 
-    private void OnComplete(UObject obj)
+    public void LoadUI(string assetName, Action<UObject> action = null)
     {
-        GameObject go = Instantiate(obj) as GameObject;
-        go.transform.SetParent(this.transform);
-        go.SetActive(true);
-        go.transform.localPosition = Vector3.zero;
+        LoadAsset(PathUtil.GetUIPath(assetName), action);
     }
+
+    public void LoadMusic(string assetName, Action<UObject> action = null)
+    {
+        LoadAsset(PathUtil.GetMusicPath(assetName), action);
+    }
+
+    public void LoadSound(string assetName, Action<UObject> action = null)
+    {
+        LoadAsset(PathUtil.GetSoundPath(assetName), action);
+    }
+
+    public void LoadEffect(string assetName, Action<UObject> action = null)
+    {
+        LoadAsset(PathUtil.GetEffectPath(assetName), action);
+    }
+
+    public void LoadScene(string assetName, Action<UObject> action = null)
+    {
+        LoadAsset(PathUtil.GetScenePath(assetName), action);
+    }
+
+    //Tag:卸载暂时不做
+
 }
