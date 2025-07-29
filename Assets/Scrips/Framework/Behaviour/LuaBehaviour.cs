@@ -22,7 +22,7 @@ public class LuaBehaviour : MonoBehaviour
         m_ScriptEnv.SetMetaTable(meta);
         meta.Dispose();
 
-        m_ScriptEnv.Set("Self", this);
+        m_ScriptEnv.Set("self", this);
 
     }
 

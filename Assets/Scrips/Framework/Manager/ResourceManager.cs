@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using Unity.VisualScripting;
 using UnityEngine;
 using UObject = UnityEngine.Object;
 
@@ -16,6 +17,8 @@ public class ResourceManager : MonoBehaviour
 
     //存放Bundle信息的集合
     private Dictionary<string, BundleInfo> m_BundleInfos = new Dictionary<string, BundleInfo>();
+    //存放Bundle资源的集合
+    private Dictionary<string, AssetBundle> m_AssetBundles = new Dictionary<string, AssetBundle>();
 
     /// <summary>
     /// 解析版本文件
@@ -57,22 +60,44 @@ public class ResourceManager : MonoBehaviour
         string bundleName = m_BundleInfos[assetName].BundleName;
         string bundlePath = Path.Combine(PathUtil.BundleResourcePath, bundleName);
         List<string> dependence = m_BundleInfos[assetName].Dependences;
-        if(dependence != null && dependence.Count > 0)
+
+        AssetBundle bundle = GetBundle(bundleName);
+        if(bundle == null)
         {
-            for (int i = 0; i < dependence.Count; i++)
+            if (dependence != null && dependence.Count > 0)
             {
-                yield return LoadBundleAsync(dependence[i]);
+                for (int i = 0; i < dependence.Count; i++)
+                {
+                    yield return LoadBundleAsync(dependence[i]);
+                }
             }
+
+            AssetBundleCreateRequest request = AssetBundle.LoadFromFileAsync(bundlePath);
+            yield return request;
+            bundle = request.assetBundle;
+            m_AssetBundles.Add(bundleName, bundle);
         }
 
-        AssetBundleCreateRequest request = AssetBundle.LoadFromFileAsync(bundlePath);
-        yield return request;
-
-        AssetBundleRequest bundleRequest = request.assetBundle.LoadAssetAsync(assetName);
+        if (assetName.EndsWith(".unity"))
+        {
+            action?.Invoke(null);
+            yield break;
+        }
+        AssetBundleRequest bundleRequest = bundle.LoadAssetAsync(assetName);
         yield return bundleRequest;
 
         Debug.Log("this is LoadBundleAsync");
         action?.Invoke(bundleRequest?.asset);
+    }
+
+    AssetBundle GetBundle(string name)
+    {
+        AssetBundle bundle = null;
+        if(m_AssetBundles.TryGetValue(name, out bundle))
+        {
+            return bundle;
+        }
+        return null;
     }
 
 #if UNITY_EDITOR
@@ -127,6 +152,11 @@ public class ResourceManager : MonoBehaviour
     }
 
     internal void LoadLua(string assetName, Action<UObject> action = null)
+    {
+        LoadAsset(assetName, action);
+    }
+
+    internal void LoadPrefab(string assetName, Action<UObject> action = null)
     {
         LoadAsset(assetName, action);
     }

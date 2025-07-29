@@ -1,0 +1,19 @@
+ManifestFileVersion: 0
+CRC: 3477853791
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: bd31ff0dae0ccc9f0da86551d8fecc2a
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 1397ad235555a4f37791d5b3ff19e7a7
+HashAppended: 0
+ClassTypes:
+- Class: 21
+  Script: {instanceID: 0}
+- Class: 48
+  Script: {instanceID: 0}
+SerializeReferenceClassIdentifiers: []
+Assets:
+- Assets/BuildResources/Model/Material/player.mat
+Dependencies: []

@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
@@ -80,7 +80,12 @@ public class PathUtil
 
     public static string GetEffectPath(string name)
     {
-        return string.Format("Assets/BuildResources/Effect/Prefab/{0}.prefab", name);
+        return string.Format("Assets/BuildResources/Effect/Prefabs/{0}.prefab", name);
+    }
+
+    public static string GetModelPath(string name)
+    {
+        return string.Format("Assets/BuildResources/Model/Prefabs/{0}.prefab", name);
     }
 
     public static string GetSpritePath(string name)
