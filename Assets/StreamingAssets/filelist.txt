@@ -21,4 +21,4 @@ Assets/BuildResources/UI/Res/logoM.png|.\ui\res\logom.png.ab
 Assets/BuildResources/UI/Res/slider_handle.png|.\ui\res\slider_handle.png.ab
 Assets/BuildResources/UI/Res/ui_btton_2.png|.\ui\res\ui_btton_2.png.ab
 Assets/BuildResources/UI/Res/universal_panel_40.png|.\ui\res\universal_panel_40.png.ab
-Assets/BuildResources/UI/Prefabs/Login/LoginUI.prefab|.\ui\prefabs\login\loginui.prefab.ab|Assets/BuildResources/UI/Res/ui_btton_2.png|Assets/BuildResources/UI/Res/bg01.png
+Assets/BuildResources/UI/Prefabs/Login/LoginUI.prefab|.\ui\prefabs\login\loginui.prefab.ab|Assets/BuildResources/UI/Res/slider_handle.png|Assets/BuildResources/UI/Res/ui_btton_2.png

@@ -23,6 +23,11 @@ public class GameStart : MonoBehaviour
         //效率低下 不使用
         XLua.LuaFunction func = Manager.Lua.LuaEnv.Global.Get<XLua.LuaFunction>("Main");
         func.Call();
+
+        Manager.Pool.CreateGameObjectPool("UI", 10);
+        Manager.Pool.CreateGameObjectPool("Monster", 120);
+        Manager.Pool.CreateGameObjectPool("Effect", 120);
+        Manager.Pool.CreateAssetPool("AssetBundle", 10);
     }
 
     private void OnApplicationQuit()

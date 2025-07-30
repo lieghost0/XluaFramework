@@ -1,12 +1,12 @@
 ManifestFileVersion: 0
-CRC: 3608404585
+CRC: 3208731201
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: c851e6583861b075026036bcb13ab1df
+    Hash: 75ff66a5378c0522c3302a973d9efabf
   TypeTreeHash:
     serializedVersion: 2
-    Hash: b4dfd03a690ad4fea2b7753331a9d171
+    Hash: 1cbd4bc88386d51bad7c46b043c15440
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -21,6 +21,8 @@ ClassTypes:
   Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 67db9e8f0e2ae9c40bc1e2b64352a6b4, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
 - Class: 115
@@ -49,9 +51,11 @@ SerializeReferenceClassIdentifiers:
 - AssemblyName: UnityEngine.UI
   ClassName: UnityEngine.UI.Navigation
 - AssemblyName: UnityEngine.UI
+  ClassName: UnityEngine.UI.Slider/SliderEvent
+- AssemblyName: UnityEngine.UI
   ClassName: UnityEngine.UI.SpriteState
 Assets:
 - Assets/BuildResources/UI/Prefabs/Login/LoginUI.prefab
 Dependencies:
-- D:/work/project/XluaFramework/Assets/StreamingAssets/./ui/res/bg01.png.ab
+- D:/work/project/XluaFramework/Assets/StreamingAssets/./ui/res/slider_handle.png.ab
 - D:/work/project/XluaFramework/Assets/StreamingAssets/./ui/res/ui_btton_2.png.ab
