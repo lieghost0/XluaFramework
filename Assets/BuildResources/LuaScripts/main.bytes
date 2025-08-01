@@ -30,7 +30,7 @@ Manager.Entity:SetEntityGroup(entity_group);
 function Main()
 	msg_mgr.init()
 	Manager.Net:Init()
-	Manager.Net:ConnectedServer("127.0.0.1", 8000)
+	Manager.Net:ConnectedServer("192.168.1.6", 8000)
 	-- print("hello main");
 	Manager.UI:OpenUI("TestUI", "UI", "ui.TestUI");
 	-- Manager.UI:OpenUI("Login/LoginUI", "Main", "ui.TestUI");

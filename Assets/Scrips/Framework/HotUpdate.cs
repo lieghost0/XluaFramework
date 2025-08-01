@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
@@ -16,6 +16,9 @@ public class HotUpdate : MonoBehaviour
         public string fileName;
         public DownloadHandler fileData;
     }
+    //下载文件数量
+    int m_DownloadCount;
+
     /// <summary>
     /// 下载单个文件
     /// </summary>
@@ -33,6 +36,7 @@ public class HotUpdate : MonoBehaviour
             yield break;
             //重试
         }
+        yield return new WaitForSeconds(0.2f);
         info.fileData = webRequest.downloadHandler;
         complete?.Invoke(info);
         webRequest.Dispose();
@@ -74,8 +78,13 @@ public class HotUpdate : MonoBehaviour
         return downFileInfos;
     }
 
+    GameObject loadingObj;
+    LoadingUI loadingUI;
     private void Start()
     {
+        GameObject go = Resources.Load<GameObject>("LoadingUI");
+        loadingObj = Instantiate(go, this.transform);
+        loadingUI = loadingObj.GetComponent<LoadingUI>();
         if (IsFirstInstall())
         {
             ReleaseResources();
@@ -99,6 +108,7 @@ public class HotUpdate : MonoBehaviour
 
     private void ReleaseResources()
     {
+        m_DownloadCount = 0;
         string url = Path.Combine(PathUtil.ReadPath, AppConst.FileListName);
         DownFileInfo info = new DownFileInfo();
         info.url = url;
@@ -111,6 +121,7 @@ public class HotUpdate : MonoBehaviour
         m_ReadPathFileListData = file.fileData.data;
         List<DownFileInfo> fileInfos = GetFileList(file.fileData.text, PathUtil.ReadPath);
         StartCoroutine(DownLoadFile(fileInfos, OnReleaseFileComplete, OnReleaseAllFileComplete));
+        loadingUI.InitProgress(fileInfos.Count, "正在释放资源，不消耗流量...");
     }
 
     private void OnReleaseFileComplete(DownFileInfo fileInfo)
@@ -118,6 +129,8 @@ public class HotUpdate : MonoBehaviour
         Debug.Log("OnReleaseFileComplete:" + fileInfo.url);
         string writeFile = Path.Combine(PathUtil.ReadWritePath, fileInfo.fileName);
         FileUtil.WriteFile(writeFile, fileInfo.fileData.data);
+        m_DownloadCount++;
+        loadingUI.UpdateProgress(m_DownloadCount);
     }
 
     private void OnReleaseAllFileComplete()
@@ -136,6 +149,7 @@ public class HotUpdate : MonoBehaviour
 
     private void OnDownLoadServerFileListComplete(DownFileInfo file)
     {
+        m_DownloadCount = 0;
         m_ServerFileListData = file.fileData.data;
         List<DownFileInfo> fileInfos = GetFileList(file.fileData.text, AppConst.ResourcesUrl);
         List<DownFileInfo> downListFiles = new List<DownFileInfo>();
@@ -148,9 +162,13 @@ public class HotUpdate : MonoBehaviour
                 fileInfos[i].url = Path.Combine(AppConst.ResourcesUrl, fileInfos[i].fileName);
                 downListFiles.Add(fileInfos[i]);
             }
+            
         }
         if (downListFiles.Count > 0)
+        {
             StartCoroutine(DownLoadFile(downListFiles, OnUpdateFileComplete, OnUpdateAllFileComplete));
+            loadingUI.InitProgress(downListFiles.Count, "正在更新...");
+        }
         else
             EnterGame();
     }
@@ -160,25 +178,20 @@ public class HotUpdate : MonoBehaviour
         Debug.Log("OnUpdateFileComplete:" + file.url);
         string writeFile = Path.Combine(PathUtil.ReadWritePath, file.fileName);
         FileUtil.WriteFile(writeFile, file.fileData.data);
+        m_DownloadCount++;
+        loadingUI.UpdateProgress(m_DownloadCount);
     }
 
     private void OnUpdateAllFileComplete()
     {
         FileUtil.WriteFile(Path.Combine(PathUtil.ReadWritePath, AppConst.FileListName), m_ServerFileListData);
         EnterGame();
+        loadingUI.InitProgress(0, "正在载入...");
     }
 
     private void EnterGame()
     {
-        Manager.Resource.ParseVersionFile();
-        Manager.Resource.LoadUI("TestUI", OnComplete);
-    }
-
-    private void OnComplete(UnityEngine.Object obj)
-    {
-        GameObject go = Instantiate(obj) as GameObject;
-        go.transform.SetParent(this.transform);
-        go.SetActive(true);
-        go.transform.localPosition = Vector3.zero;
+        Manager.Event.Fire((int)GameEvent.GameInit);
+        Destroy(loadingObj);
     }
 }

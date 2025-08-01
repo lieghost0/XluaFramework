@@ -152,7 +152,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eb80325362badfd40b06240ad9e2ee8c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GameMode: 0
+  GameMode: 2
   OpenLog: 1
 --- !u!4 &26183588
 Transform:

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -8,17 +9,28 @@ public class GameStart : MonoBehaviour
     public bool OpenLog;
     void Start()
     {
-        Manager.Event.Subscribe(10000, OnLuaInit);
+        Manager.Event.Subscribe((int)GameEvent.StartLua, StartLua);
+        Manager.Event.Subscribe((int)GameEvent.GameInit, GameInit);
 
         AppConst.GameMode = this.GameMode;
         AppConst.OpenLog = this.OpenLog;
         DontDestroyOnLoad(this);
 
-        Manager.Resource.ParseVersionFile();
+        if (AppConst.GameMode == GameMode.UpdateMode)
+            this.gameObject.AddComponent<HotUpdate>();
+        else
+            Manager.Event.Fire((int)GameEvent.GameInit);
+
+    }
+
+    private void GameInit(object args)
+    {
+        if(AppConst.GameMode != GameMode.EditorMode)
+            Manager.Resource.ParseVersionFile();
         Manager.Lua.Init();
     }
 
-    private static void OnLuaInit(object args)
+    private static void StartLua(object args)
     {
         Manager.Lua.StartLua("main");
 
@@ -34,6 +46,7 @@ public class GameStart : MonoBehaviour
 
     private void OnApplicationQuit()
     {
-        Manager.Event.Unsubscribe(10000, OnLuaInit);
+        Manager.Event.Unsubscribe((int)GameEvent.StartLua, StartLua);
+        Manager.Event.Unsubscribe((int)GameEvent.GameInit, GameInit);
     }
 }
